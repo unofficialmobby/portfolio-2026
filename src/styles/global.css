@@ -1,0 +1,130 @@
+/* src/styles/global.css */
+
+:root {
+  /* BACKGROUND: Tiefes, technisches Schwarz (statt hartes #000) */
+  --color-bg: #0a0a0a;
+  
+  /* TEXT: Reines Weiß für Headlines, Grau für Body */
+  --color-text-primary: #ECEFF4;
+  --color-text-secondary: #D8DEE9;
+  
+  /* ACCENT: Das ist dein "Research Blue" (Cyan) */
+  /* Wir nutzen KEIN Lila mehr. Nur noch dieses Blau. */
+  --color-accent: #007595; 
+  
+  /* GLOW: Das Blau in transparent für Schimmer-Effekte */
+  --color-accent-glow: rgba(136, 192, 208, 0.4);
+  
+  /* SPACING */
+  --spacing-small: 1rem;
+  --spacing-medium: 2rem;
+  --spacing-large: 4rem;
+  --spacing-xlarge: 8rem;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Auswahl-Farbe (Wenn man Text markiert) auch anpassen */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Eine globale Hilfsklasse für den Glas-Effekt */
+.unified-card {
+  /* 1. Das Glas-Material */
+  background: rgba(20, 20, 20, 0.6) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  /* 2. Der Rahmen (Subtil & Edel) */
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 24px !important; /* Etwas runder für modernen Look */
+  
+  /* 3. Schatten & Tiefe */
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+  
+  /* 4. Interaktion (Transition für alle) */
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* Layout-Grundlagen für Karten */
+  padding: var(--spacing-large);
+  overflow: hidden; /* Wichtig für Shine-Effekte etc. */
+}
+
+/* Der einheitliche Hover-Effekt für ALLE Karten */
+.unified-card:hover {
+  transform: translateY(-6px); /* Sanftes Schweben */
+  border-color: rgba(255, 255, 255, 0.2) !important; /* Rahmen wird heller */
+  background: rgba(30, 30, 30, 0.7) !important; /* Hintergrund etwas heller */
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4); /* Schatten wächst */
+}
+
+/* Film Grain Effekt - macht die Seite "haptischer" */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  
+  /* ÄNDERUNG: Viel subtiler (2.5% statt 5%) */
+  opacity: 0.05; 
+  
+  /* NEU: Overlay-Modus lässt es natürlicher wirken */
+  mix-blend-mode: overlay; 
+  
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* src/styles/global.css */
+
+/* --- GLOBALE SECTION HEADER (Einheitlicher Look) --- */
+.section-header {
+  text-align: left; /* Text bleibt links */
+  margin-bottom: var(--spacing-large);
+  
+  /* DER FIX: Wir begrenzen die Breite genau wie beim Grid */
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;  /* Block zentrieren */
+  margin-right: auto; /* Block zentrieren */
+  
+  /* Kleiner Puffer links/rechts für Mobile, damit es nicht am Rand klebt */
+  padding: 0 1rem; 
+}
+
+.section-label {
+  display: block;
+  font-family: 'Courier New', Courier, monospace; /* Tech-Look */
+  font-size: 0.9rem;
+  color: rgba(136, 192, 208, 0.8); /* Dein Scientific Cyan */
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* src/styles/global.css */
+
+.section-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.section-subtitle {
+  margin-top: 1rem;
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 600px;
+}

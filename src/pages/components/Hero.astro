@@ -1,0 +1,113 @@
+<section id="top">
+  <h1 id="hero-headline">Jonas Heinze</h1>
+  <p>Building intelligent systems with relentless drive.</p>
+</section>
+
+<style>
+  section {
+    display: flex;
+    flex-direction: column; /* Wichtig, damit h1 und p untereinander stehen */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+
+  h1 {
+    /* 1. TYPOGRAPHIE & GRÖSSE */
+    /* clamp(MIN, VAL, MAX) ist perfekt für responsive Headlines */
+    font-size: clamp(4rem, 15vw, 9rem);
+    font-weight: 800; 
+    margin: 0;
+    
+    /* Fallback Farbe, falls der Gradient nicht lädt */
+    color: var(--color-text-primary);
+    
+    /* Modernes "Tight" Styling */
+    letter-spacing: -0.05em; 
+    line-height: 0.9; 
+    word-wrap: break-word; /* Wichtig, falls "Jonas" auf dem Handy zu breit ist */
+    
+    /* 2. DER GRADIENT FIX */
+    /* WICHTIG: Variablen immer in var() packen! */
+    background-image: linear-gradient(
+        to bottom right, 
+        var(--color-text-primary) 0%,   /* Startet Weiß/Hellgrau */
+        var(--color-text-secondary) 20%, /* Übergang */
+        var(--color-accent) 80%        /* Endet im Scientific Cyan */
+    );
+  
+    /* 3. TEXT MASKIERUNG */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  h1 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px) scale(0.8);
+    animation: letter-rise 0.8s ease-out forwards;
+    transition: transform 0.2s ease-out;
+  }
+  
+  h1 span:hover {
+    transform: translateY(-10px) scale(1.1);
+    color: var(--color-accent);
+  }
+
+  p {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-small);
+    opacity: 0;
+    animation: fade-in 1s ease-out 1s forwards;
+  }
+  
+  @keyframes letter-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+
+/* Dieser Code wird NUR ausgeführt, wenn der Nutzer 
+   "Bewegung reduzieren" aktiviert hat */
+@media (prefers-reduced-motion: reduce) {
+  h1 span {
+    /* Deaktiviere die komplexe Animation */
+    animation: none;
+    
+    /* Zeige die Buchstaben stattdessen mit einem simplen Fade-in */
+    opacity: 0;
+    animation: fade-in 1s ease-out forwards;
+  }
+}
+
+</style>
+
+<script is:inline>
+  const headline = document.querySelector('#hero-headline');
+  // WICHTIG: Prüfen, ob das Element wirklich gefunden wurde, bevor wir weitermachen
+  if (headline) {
+    const text = headline.textContent;
+    headline.textContent = '';
+
+    text.split('').forEach((char, index) => {
+      const span = document.createElement('span');
+      if (char === ' ') {
+        span.innerHTML = '&nbsp;';
+      } else {
+        span.textContent = char;
+      }
+      span.style.animationDelay = `${index * 50}ms`;
+      headline.appendChild(span);
+    });
+  }
+</script>

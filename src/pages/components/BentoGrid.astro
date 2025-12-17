@@ -1,0 +1,261 @@
+---
+/* src/components/BentoGrid.astro */
+---
+
+<section id="skills">
+  <div class="section-header">
+    <span class="section-label">03 // Way of Working</span>
+    <h2 class="section-title">Tech & Skills</h2>
+    <p class="section-subtitle">Mein Werkzeugkasten für komplexe Probleme.</p>
+  </div>
+
+  <div class="bento-grid">
+    
+    <div class="bento-item item-main unified-card">
+      <h3>AI & Python Ecosystem</h3>
+      <p>Die Entwicklung intelligenter Agenten und Automatisierungen habe ich zunächst aus eigenem Antrieb begonnen. Gemeinsam mit einem Kommilitonen baue ich derzeit eine selbstlernende KI-Unterstützungsplattform auf Basis funktional unabhängiger Microservices. Dazu gehören unter anderem Prognosen von Strompreisen und Wetterdaten sowie das Scannen, Klassifizieren und Weiterverarbeiten von Dokumenten und E-Mails. Was als experimenteller "AI-Playground" begann, erleichtert heute spürbar die eigene Organisation</p>
+      <div class="tags">
+        <span>Python</span>
+        <span>TensorFlow</span>
+        <span>OpenAI API</span>
+        <span>Pandas</span>
+      </div>
+    </div>
+
+    <div class="bento-item item-web unified-card">
+      <h3>Teamplay</h3>
+      <p>Manche Probleme lassen sich nicht allein lösen. Durch meine Erfahrungen im Fußball und in agilen Teams habe ich gelernt, mich konstruktiv in Gruppen einzubringen, einzelne Mitglieder zu befähigen und zugleich das gesamte Team voranzubringen. </p><p> Und wenn es nicht nur Menschen, sondern auch Maschinen braucht, bin ich durch Studienarbeiten sowie meine Tätigkeit in der Wasserwacht gut darauf vorbereitet, Verantwortung zu übernehmen und Technik zielgerichtet einzusetzen, ohne Einzelpersonen abzuhängen.</p>
+      <div class="tags">
+        <span>Meetingkultur</span>
+        <span>Integrität</span>
+        <span>Kommunikation</span>
+        <span>Docker</span>
+        <span>Git</span>
+      </div>
+    </div>
+
+    <div class="bento-item item-lead leadership-card">
+      <div class="image-background" style="background-image: url('../images/jonas.JPG');"></div>
+      
+      <div class="card-content">
+        <h3>Leadership</h3>
+        <p>Erfahrung in Führung und Ausbildung durch die Wasserwacht. Ich versuche in meiner Arbeit menschliche Nähe mit Technik zu ergänzen.</p>
+      </div>
+    </div>
+
+    <div class="bento-item item-method unified-card">
+      <h3>Methodik</h3>
+      <p>Im Studium an der Hochschule München habe ich Scrum als agile Arbeitsweise sowie Konzepte des Clean Codings theoretisch kennengelernt. In den Bereichen IT-Strategie und Aftersales der BMW Group konnte ich diese Prinzipien anschließend in der Praxis erleben und anwenden.</p>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #skills {
+    padding: var(--spacing-xlarge) var(--spacing-large);
+  }
+  
+  h2 { font-size: 3rem; margin-bottom: var(--spacing-small); }
+  .header-container p { color: var(--color-text-secondary); font-size: 1.2rem; }
+
+  /* --- DAS GRID LAYOUT --- */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: var(--spacing-medium);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .bento-grid {
+      grid-template-columns: repeat(3, 1fr);
+      /* FIX: Von 250px auf 360px erhöht. 
+         Das gibt dem längeren Text genug Raum. */
+      grid-template-rows: repeat(2, minmax(360px, auto)); 
+    }
+
+    .item-main {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    
+    .item-web {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+    
+    .item-lead {
+      grid-column: span 1;
+    }
+
+    .item-method {
+      grid-column: span 1;
+    }
+  }
+
+  .bento-item {
+    display: flex;
+    flex-direction: column;
+    /* VORHER: justify-content: space-between; */
+    
+    /* NEU: Wir lassen den Inhalt natürlich fließen, aber mit erzwungenem Abstand */
+    /* space-between kann raus, wenn wir gap nutzen, oder drin bleiben. 
+       Gap ist aber sicherer gegen Überlappung. */
+    justify-content: space-between; 
+    gap: 1.5rem; /* Mindestabstand zwischen Text und Tags/Icon */
+    
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    
+    /* Sicherstellen, dass nichts abgeschnitten wird, falls es doch mal eng wird */
+    overflow: visible; 
+  }
+
+  /* --- STYLING DER STANDARD BOXEN --- */
+  .bento-item p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-medium);
+    
+    /* HIER IST DER WUNSCH: */
+    text-align: justify;      /* Blocksatz */
+    hyphens: auto;            /* Silbentrennung (verhindert Lücken) */
+    -webkit-hyphens: auto;
+  }
+
+  /* Hover für alle Boxen */
+  .bento-item:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Nur die Standard-Karten leuchten am Rand (die Bildkarte hat eigenen Style) */
+  .unified-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  h3 {
+    margin: 0 0 var(--spacing-small) 0;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-medium);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto; /* Drückt Tags nach ganz unten */
+    
+    /* FIX: Verhindert, dass Tags zerquetscht werden, wenn Text zu lang ist */
+    flex-shrink: 0; 
+  }
+
+  .tags span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+  }
+
+  /* --- SPEZIAL STYLING FÜR DIE LEADERSHIP IMAGE CARD --- */
+  .leadership-card {
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a; /* Das ist wichtig: Der Hintergrund ist schwarz */
+    padding: 0 !important;
+    border: none;
+    /* Schatten weg, der hat eh nicht funktioniert wegen z-index Problemen */
+    box-shadow: none; 
+  }
+
+  .image-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    
+    /* DER FIX: */
+    /* Wir machen das Bild 2px kürzer als die Box. */
+    /* Die untersten 2px sind jetzt "leer" (also sieht man den schwarzen Hintergrund der Karte). */
+    /* Tschüss, bunter Rand! */
+    height: calc(100% - 16px); 
+    
+    filter: grayscale(100%);
+    opacity: 0.5; 
+    transition: all 0.5s ease;
+    background-repeat: no-repeat;
+
+    /* HANDY STANDARD */
+    background-size: cover; 
+    background-position: center 20%;
+  }
+
+/* --- DESKTOP ÜBERSCHREIBUNG --- */
+  @media (min-width: 768px) {
+    .image-background {
+      /* 1. ZOOM: Wir machen das Bild viel breiter (170%), damit wir schieben können */
+      background-size: 250% auto; 
+      
+      /* 2. POSITION: Hier schiebst du jetzt deinen Kopf */
+      /* Erster Wert (Horizontal): */
+      /* 0%   = Schiebt das Bild ganz nach RECHTS (zeigt den linken Bildrand) */
+      /* 50%  = Mitte */
+      /* 100% = Schiebt das Bild ganz nach LINKS (zeigt den rechten Bildrand) */
+      
+      /* Spiel mit diesem ersten Wert (z.B. 20%, 40%, 60%) */
+      /* Zweiter Wert (Vertikal): 25% bleibt für die Kopfhöhe */
+      background-position: 55% 21%; 
+    }
+  }
+
+  /* --- HOVER EFFEKT (Bleibt gleich) --- */
+  .leadership-card:hover .image-background {
+    filter: grayscale(0%);
+    opacity: 0.8;
+    /* Beim Hover zoomen wir von dem aktuellen Status noch etwas weiter rein */
+    transform: scale(1.05);
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    padding: 1.5rem;
+    
+    /* NEUER GRADIENT: */
+    /* 0% bis 40%: Komplett transparent (Gesicht frei) */
+    /* 100%: Komplett Schwarz (Text lesbar) */
+    /* Der Übergang ist jetzt viel länger und weicher */
+    background: linear-gradient(
+        to bottom, 
+        transparent 0%, 
+        transparent 40%, 
+        rgba(10,10,10, 0.8) 75%, 
+        #0a0a0a 100%
+    );
+  }
+
+  .leadership-card h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .leadership-card p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 0;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+</style>

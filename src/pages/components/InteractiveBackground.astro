@@ -1,0 +1,369 @@
+<canvas id="neural-canvas"></canvas>
+
+<style>
+  :global(body) { 
+      background-color: #0a0a0a; 
+      min-height: 100vh;
+      user-select: none; 
+      -webkit-user-select: none;
+  }
+  
+  #neural-canvas {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: #0a0a0a;
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById('neural-canvas');
+  // @ts-ignore
+  const ctx = canvas.getContext('2d');
+  
+  let width, height;
+  let particles = [];
+  let textPoints = []; 
+  
+  // CONFIG
+  const particleCount = 315; 
+  const connectionDistance = 164; 
+  const connectionDistanceSq = connectionDistance * connectionDistance;
+
+  // PHYSIK
+  const baseMouseDist = 225;     
+  const startGrabDist = 450;     
+  const minGrabDist = 120;       
+  
+  const basePull = 0.06;     
+  const grabPull = 5.6;     
+  const throwForce = 0.3; 
+  const throwRadius = 500;
+  
+  let transitionProgress = 0; 
+  const transitionSpeed = 0.015; 
+  const maxSpeed = 30;
+
+  let currentGrabRadius = startGrabDist;
+
+  let mouse = { x: -1000, y: -1000 };
+  let lastMouse = { x: -1000, y: -1000 }; 
+  let mouseVelocity = { x: 0, y: 0 };   
+  let isMouseDown = false; 
+  
+  // Status-Tracking für die Explosion
+  let isTriggerActive = false; 
+  let wasTriggerActive = false; // Merkt sich den Zustand vom letzten Frame
+
+  // --- SCAN METHODE ---
+  function calculateTextCoordinates() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const tCanvas = document.createElement('canvas');
+    const tCtx = tCanvas.getContext('2d');
+    
+    if (w === 0 || h === 0) return;
+    tCanvas.width = w; tCanvas.height = h;
+
+    tCtx.fillStyle = '#000000'; tCtx.fillRect(0, 0, w, h);
+    
+    const fontSize = Math.min(w, h) * 0.35; 
+    tCtx.font = `900 ${fontSize}px "Arial Black", Verdana, Arial, sans-serif`; 
+    tCtx.fillStyle = '#FFFFFF';
+    tCtx.textAlign = 'center'; tCtx.textBaseline = 'middle';
+    tCtx.fillText('JH', w / 2, h / 2);
+
+    const imageData = tCtx.getImageData(0, 0, w, h).data;
+    const step = 6; 
+    
+    textPoints = [];
+    for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+            const index = (y * w + x) * 4;
+            if (imageData[index] > 100) textPoints.push({ x: x, y: y });
+        }
+    }
+    
+    if (textPoints.length === 0) {
+        const cx = w/2, cy = h/2;
+        for(let i=0; i<400; i++) {
+             const a = Math.random()*Math.PI*2; const r = Math.random()*200;
+             textPoints.push({ x: cx + Math.cos(a)*r, y: cy + Math.sin(a)*r });
+        }
+    } else {
+        textPoints.sort(() => Math.random() - 0.5);
+    }
+  }
+
+  // --- TRIGGER CHECK ---
+  function checkScroll() {
+      const footer = document.querySelector('.grand-finale-spacer');
+      let shouldTrigger = false;
+
+      if (footer) {
+          const rect = footer.getBoundingClientRect();
+          shouldTrigger = rect.top < (window.innerHeight * 0.75);
+      } else {
+          const dist = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+          shouldTrigger = dist < 200;
+      }
+
+      // Zustand aktualisieren
+      wasTriggerActive = isTriggerActive; // Alten Zustand sichern
+      
+      if (shouldTrigger) {
+          if (!isTriggerActive) {
+              isTriggerActive = true;
+              if (textPoints.length === 0) calculateTextCoordinates();
+          }
+      } else {
+          isTriggerActive = false;
+      }
+
+      // EXPLOSIONS-CHECK:
+      // Waren wir aktiv (true) und sind es jetzt nicht mehr (false)? -> BOOM
+      if (wasTriggerActive && !isTriggerActive) {
+          explodeParticles();
+      }
+  }
+
+  // --- EXPLOSION ---
+  function explodeParticles() {
+      // console.log("BOOM! Explosion ausgelöst");
+      particles.forEach(p => {
+          // Zufällige Richtung (Winkel)
+          const angle = Math.random() * Math.PI * 2;
+          // Hohe Geschwindigkeit (15 bis 35)
+          const force = Math.random() * 20 + 15; 
+          
+          p.vx = Math.cos(angle) * force;
+          p.vy = Math.sin(angle) * force;
+          
+          // Disruption auf 1 setzen, damit sie sofort "frei" sind
+          // und nicht versuchen, zum Text zurückzugleiten (Transition braucht Zeit)
+          p.disruption = 1.0;
+      });
+  }
+
+  // --- EVENTS ---
+  window.addEventListener('scroll', checkScroll);
+  
+  window.addEventListener('mousemove', (e) => {
+    if (lastMouse.x === -1000) { lastMouse.x = e.x; lastMouse.y = e.y; }
+    mouseVelocity.x = e.x - lastMouse.x;
+    mouseVelocity.y = e.y - lastMouse.y;
+    lastMouse.x = e.x; lastMouse.y = e.y;
+    mouse.x = e.x; mouse.y = e.y;
+  });
+  
+  window.addEventListener('mouseout', () => { mouse.x = -1000; isMouseDown = false; });
+  
+  window.addEventListener('mousedown', (e) => { 
+      if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
+          e.preventDefault(); 
+      }
+      isMouseDown = true; 
+      currentGrabRadius = startGrabDist;
+  });
+  
+  window.addEventListener('mouseup', () => {
+    isMouseDown = false;
+    
+    if (mouse.x > 0) {
+        const vx = Math.min(Math.max(mouseVelocity.x, -50), 50);
+        const vy = Math.min(Math.max(mouseVelocity.y, -50), 50);
+
+        if (Math.abs(vx) > 2 || Math.abs(vy) > 2) {
+            particles.forEach(p => {
+                let dx = p.x - mouse.x; let dy = p.y - mouse.y;
+                if (dx*dx + dy*dy < currentGrabRadius * currentGrabRadius) {
+                    const force = throwForce * 2.0; 
+                    p.vx += vx * force;
+                    p.vy += vy * force;
+                    p.disruption = 1.2; 
+                }
+            });
+        }
+    }
+    currentGrabRadius = startGrabDist;
+  });
+  
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { 
+        e.preventDefault(); 
+        // Manuelle Explosion beim Umschalten per Leertaste simulieren
+        const willBeActive = !isTriggerActive;
+        if (isTriggerActive && !willBeActive) explodeParticles();
+        
+        isTriggerActive = willBeActive;
+        if(isTriggerActive && textPoints.length === 0) calculateTextCoordinates(); 
+    }
+  });
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    calculateTextCoordinates();
+    checkScroll();
+  }
+  window.addEventListener('resize', resize);
+  
+  class Particle {
+    constructor() {
+      const w = width || window.innerWidth;
+      const h = height || window.innerHeight;
+      this.x = Math.random() * w; this.y = Math.random() * h;
+      this.vx = (Math.random() - 0.5) * 0.5; 
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 1.5 + 0.5; 
+      this.baseVxBase = (Math.random() - 0.5) * 0.2;
+      this.baseVyBase = (Math.random() - 0.5) * 0.2;
+      this.textPointOffset = Math.floor(Math.random() * 10000);
+      this.disruption = 0;
+    }
+
+    update(index) {
+      if (isNaN(this.x)) { this.x = Math.random() * width; this.vx=0; this.vy=0; } 
+
+      if (this.disruption > 0) {
+          this.disruption *= 0.9996; 
+          if (this.disruption < 0.01) this.disruption = 0;
+      }
+
+      const effectiveProgress = transitionProgress * (1 - Math.min(1, this.disruption));
+      const chaosFactor = (1 - effectiveProgress);
+
+      if (chaosFactor > 0.01) {
+         this.vx += (this.baseVxBase - this.vx) * 0.01 * chaosFactor;
+         this.vy += (this.baseVyBase - this.vy) * 0.01 * chaosFactor;
+      }
+
+      if (effectiveProgress > 0.001 && textPoints.length > 0) {
+          const targetIndex = (index + this.textPointOffset) % textPoints.length;
+          const target = textPoints[targetIndex]; 
+
+          if (target) {
+            const strength = 0.08 * effectiveProgress;
+            this.x += (target.x - this.x) * strength;
+            this.y += (target.y - this.y) * strength;
+          }
+      }
+
+      if (mouse.x > 0) {
+        let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+        let distSq = dx*dx + dy*dy;
+        const cDist = isMouseDown ? currentGrabRadius : baseMouseDist;
+        
+        if (distSq < cDist*cDist && distSq > 1) {
+            let dist = Math.sqrt(distSq);
+            let force = (cDist - dist) / cDist;
+            let pull = isMouseDown ? grabPull : basePull;
+            if (effectiveProgress > 0.8) pull *= 0.5;
+            this.vx += (dx/dist) * force * pull;
+            this.vy += (dy/dist) * force * pull;
+        }
+      }
+
+      const speedSq = this.vx * this.vx + this.vy * this.vy;
+      if (speedSq > maxSpeed * maxSpeed) {
+          const ratio = maxSpeed / Math.sqrt(speedSq);
+          this.vx *= ratio; this.vy *= ratio;
+      }
+
+      const currentFriction = this.disruption > 0.1 ? 0.99 : 0.92;
+      this.vx *= isMouseDown ? 0.96 : currentFriction; 
+      this.vy *= isMouseDown ? 0.96 : currentFriction;
+
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (this.x < 0) { this.x = 0; this.vx *= -1; }
+      else if (this.x > width) { this.x = width; this.vx *= -1; }
+      
+      if (this.y < 0) { this.y = 0; this.vy *= -1; }
+      else if (this.y > height) { this.y = height; this.vy *= -1; }
+    }
+
+    draw() {
+      const brightness = Math.max(0.6, transitionProgress, this.disruption);
+      ctx.fillStyle = `rgba(255, 255, 255, ${brightness})`; 
+      
+      ctx.beginPath();
+      
+      let s = this.size;
+      s = s + (transitionProgress * 1.5);
+
+      if (mouse.x > 0) {
+         let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+         const checkDist = isMouseDown ? currentGrabRadius : baseMouseDist;
+         if (dx*dx + dy*dy < checkDist*checkDist) s *= 1.5; 
+      }
+      ctx.arc(this.x, this.y, s, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    width = window.innerWidth; height = window.innerHeight;
+    canvas.width = width; canvas.height = height;
+    calculateTextCoordinates();
+    particles = [];
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+    checkScroll();
+    animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    if (isTriggerActive && textPoints.length > 0) {
+        transitionProgress = Math.min(1.0, transitionProgress + transitionSpeed);
+    } else {
+        transitionProgress = Math.max(0.0, transitionProgress - transitionSpeed);
+    }
+
+    if (isMouseDown) {
+        currentGrabRadius = Math.max(minGrabDist, currentGrabRadius - 3.5);
+    } else {
+        currentGrabRadius = startGrabDist;
+    }
+
+    mouseVelocity.x *= 0.9; mouseVelocity.y *= 0.9;
+    
+    const shouldDrawLines = transitionProgress < 0.95;
+    const lineFade = 1.0 - transitionProgress;
+
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update(i); 
+      particles[i].draw();
+
+      if (shouldDrawLines) { 
+          for (let j = i + 1; j < particles.length; j++) {
+            let dx = particles[i].x - particles[j].x;
+            let dy = particles[i].y - particles[j].y;
+            if (Math.abs(dx) > connectionDistance || Math.abs(dy) > connectionDistance) continue;
+            let distSq = dx*dx + dy*dy;
+            if (distSq < connectionDistanceSq) {
+              let opacity = 1 - (Math.sqrt(distSq) / connectionDistance);
+              opacity *= lineFade;
+              const lineAlpha = isMouseDown ? 0.3 : 0.15;
+              if (opacity * lineAlpha > 0.01) {
+                  ctx.beginPath();
+                  ctx.strokeStyle = `rgba(136, 192, 208, ${opacity * lineAlpha})`; 
+                  ctx.lineWidth = 1;
+                  ctx.moveTo(particles[i].x, particles[i].y);
+                  ctx.lineTo(particles[j].x, particles[j].y);
+                  ctx.stroke();
+              }
+            }
+          }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('load', init);
+  setTimeout(init, 500); 
+</script>

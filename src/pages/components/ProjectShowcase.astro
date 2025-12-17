@@ -1,0 +1,178 @@
+---
+const techStack = {
+  libraries: [
+    "streamlit", "asyncio", "base64", "jinja2", "playwright", "smtplib", "email",
+    "subprocess", "sys", "pathlib", "datetime", "json"
+  ],
+  technologies: [
+    "HTML", "PDF", "JSON", "Google Generative AI"
+  ]
+};
+---
+
+<section id="project-showcase">
+  <div class="section-header">
+    <span class="section-label">02 // CASE STUDY</span>
+    <h2 class="section-title">Projekt-Fokus: KI Trainingsplaner</h2>
+    <p class="section-subtitle">Eine Fallstudie über Automatisierung und Effizienz.</p>
+  </div>
+
+  <div class="story-container">
+    <div class="story-step">
+      <h3>Die Herausforderung</h3>
+      <p>Trainer der Wasserwacht erstellten Pläne manuell neben Beruf und Studium. Heterogenes Wissen führte zu inkonsistenten Trainingszielen und unnötiger Komplexität für die Jugendlichen.</p>
+    </div>
+    
+    <div class="story-step">
+      <h3>Meine Lösung</h3>
+      <p>Ein automatisierter Web-Workflow mit KI-Kern. Anhand von 5 Inputs wird ein personalisierter Plan als PDF generiert und automatisiert per E-Mail an den Nutzer versendet.</p>
+    </div>
+
+    <div class="story-step tech-stack-step">
+      <h3>Tech-Stack</h3>
+      <div class="stack-grid">
+        {techStack.libraries.map(tech => <div class="tech-tag library">{tech}</div>)}
+        {techStack.technologies.map(tech => <div class="tech-tag technology">{tech}</div>)}
+      </div>
+    </div>
+
+    <div class="story-step result-step">
+      <h3>Das Ergebnis</h3>
+      <div class="result-grid">
+        <div class="result-box unified-card">
+          <span class="impact-number">~66%</span>
+          <span class="impact-text">Reduzierung der Vorbereitungszeit für Trainer</span>
+        </div>
+        <div class="result-box unified-card">
+          <span class="impact-number">100%</span>
+          <span class="impact-text">Akzeptanz bei den Trainern in Lohhof</span>
+        </div>
+        <div class="result-box unified-card">
+          <span class="impact-number">✓</span>
+          <span class="impact-text">Bayernweiter Rollout in Planung</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #project-showcase {
+    padding: var(--spacing-xlarge) var(--spacing-large);
+    background-color: transparent;
+    color: var(--color-text-primary);
+    overflow-x: hidden;
+  }
+
+  .intro-container { text-align: center; margin-bottom: calc(2 * var(--spacing-xlarge)); }
+  
+  .project-title { 
+    font-size: 3.5rem; 
+    margin-bottom: var(--spacing-small);
+    font-weight: 700;
+  }
+  
+  .project-subtitle { font-size: 1.25rem; color: var(--color-text-secondary); }
+  .story-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: calc(2 * var(--spacing-xlarge)); }
+
+  .story-step { opacity: 0; }
+  .story-step h3 { font-size: 1rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--spacing-medium); margin-left: var(--spacing-small); }
+  .story-step p { font-size: 1.5rem; line-height: 1.6; color: var(--color-text-secondary); margin-left: var(--spacing-small); }
+  
+  .tech-stack-step h3 { text-align: center; margin-left: 0; }
+
+  /* --- STYLES FÜR DEN TECH STACK CONTAINER --- */
+  .stack-grid { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 12px; /* Etwas Luft zwischen den Chips */
+    justify-content: center; 
+    /* Kein Background mehr hier, damit die Chips schweben */
+  }
+
+  /* --- STYLES FÜR DIE TAGS (JETZT IM GLAS-LOOK) --- */
+  .tech-tag { 
+    /* Wir kopieren die DNA von .unified-card, passen sie aber für kleine Chips an */
+    background: rgba(20, 20, 20, 0.4); /* Etwas transparenter als die großen Karten */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    padding: 10px 20px; /* Großzügiges Padding für gute Lesbarkeit */
+    border-radius: 100px; /* Pill-Shape */
+    font-family: monospace; 
+    font-size: 0.95rem; 
+    color: var(--color-text-primary);
+    
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .tech-tag:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  /* Hervorhebung für Haupt-Technologien */
+  .tech-tag.technology { 
+    background: rgba(0, 170, 255, 0.1); /* Hauch von Blau */
+    border-color: rgba(0, 170, 255, 0.3);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .tech-tag.technology:hover {
+    background: rgba(0, 170, 255, 0.25);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+  }
+
+  /* --- STYLES FÜR DIE ERGEBNISSE --- */
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-medium);
+  }
+
+  .result-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+    /* Styles kommen von .unified-card via HTML Klasse */
+  }
+
+  .impact-number { display: block; font-size: 3.5rem; font-weight: bold; color: var(--color-accent); line-height: 1; margin-bottom: var(--spacing-small); }
+  .impact-text { display: block; font-size: 1rem; color: var(--color-text-secondary); }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function setupAnimations() {
+    ScrollTrigger.refresh();
+    const steps = gsap.utils.toArray('.story-step');
+
+    steps.forEach((step, index) => {
+      const startX = index % 2 === 0 ? -100 : 100;
+
+      gsap.fromTo(step, 
+        { x: startX, opacity: 0 }, 
+        {
+          x: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: step, start: 'top 85%', toggleActions: 'restart none none none',
+          }
+        }
+      );
+    });
+  }
+
+  window.addEventListener('load', setupAnimations);
+</script>

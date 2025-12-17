@@ -1,0 +1,244 @@
+---
+/* src/components/Footer.astro */
+const year = new Date().getFullYear();
+---
+
+<footer class="terminal-footer" id="terminal-trigger">
+  <div class="terminal-container">
+    
+    <div class="terminal-header">
+      <div class="traffic-lights">
+        <span class="light red"></span>
+        <span class="light yellow"></span>
+        <span class="light green"></span>
+      </div>
+      <span class="terminal-title">user@jheinze:~/contact</span>
+    </div>
+    
+    <div class="terminal-body">
+      
+      <div class="line" id="line-command">
+        <span class="prompt">➜</span> 
+        <span class="cmd" id="typewriter-target"></span><span class="typing-cursor">█</span>
+      </div>
+
+      <div class="line output" id="line-1" style="display: none;">
+        <span class="dim">> Resolving connection...</span>
+      </div>
+
+      <div class="line output" id="line-2" style="display: none;">
+        <span class="dim">> Protocol established.</span>
+      </div>
+
+      <div class="line output success" id="line-3" style="display: none;">
+        > Status: <span class="highlight">OPEN FOR COLLABORATION</span>
+      </div>
+      
+      <div class="line break"></div>
+      
+      <div class="line links" id="line-links" style="display: none;">
+        <span class="prompt">➜</span> 
+        <a href="mailto:jheinze@hm.edu" class="terminal-link">Email_Kontakt</a>
+        <a href="https://www.linkedin.com/in/jonas-heinze-53a411168/" target="_blank" class="terminal-link">LinkedIn_Profile</a>
+      </div>
+
+      <div class="line footer-meta" id="line-meta" style="display: none;">
+        <span class="dim">© {year} Jonas Heinze. Built with Astro & Neural Particles.</span>
+      </div>
+      
+      <div class="line" id="line-cursor" style="display: none;">
+        <span class="prompt">➜</span> 
+        <span id="final-msg" class="cmd"></span>
+        <span class="cursor-blink">█</span>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script>
+  const terminalTrigger = document.getElementById('terminal-trigger');
+  const typewriterTarget = document.getElementById('typewriter-target');
+  const typingCursor = document.querySelector('.typing-cursor');
+  const finalMsgTarget = document.getElementById('final-msg');
+  
+  const commandText = "initiate_handshake.sh";
+  // Hier der finale Text
+  const finalText = "Thank you for scrolling.";
+  
+  let hasStarted = false;
+
+  const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  async function typeWriter(text, element) {
+    for (let i = 0; i < text.length; i++) {
+      element.textContent += text.charAt(i);
+      // Geschwindigkeit: zufällig zwischen 50ms und 100ms
+      await wait(Math.random() * 50 + 50);
+    }
+  }
+
+  async function runTerminalSequence() {
+    if (hasStarted) return;
+    hasStarted = true;
+
+    // 1. Start Verzögerung
+    await wait(800);
+
+    // 2. Ersten Befehl tippen
+    if (typewriterTarget) {
+        // @ts-ignore
+        await typeWriter(commandText, typewriterTarget);
+    }
+    
+    // Tipp-Cursor weg
+    if (typingCursor) {
+        // @ts-ignore
+        typingCursor.style.display = 'none';
+    }
+
+    await wait(300); 
+
+    // 3. Zeilenaufbau
+    const lines = [
+        { id: 'line-1', delay: 400 },
+        { id: 'line-2', delay: 300 },
+        { id: 'line-3', delay: 600 }, 
+        { id: 'line-links', delay: 200 },
+        { id: 'line-meta', delay: 100 },
+        { id: 'line-cursor', delay: 0 } // Cursor erscheint sofort
+    ];
+
+    for (const lineConfig of lines) {
+        const el = document.getElementById(lineConfig.id);
+        if (el) {
+            el.style.display = 'flex'; 
+            await wait(lineConfig.delay);
+        }
+    }
+
+    // 4. Das Finale: 5 Sekunden warten, dann bedanken
+    await wait(5000);
+    
+    if (finalMsgTarget) {
+        // @ts-ignore
+        await typeWriter(finalText, finalMsgTarget);
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runTerminalSequence();
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (terminalTrigger) observer.observe(terminalTrigger);
+</script>
+
+<style>
+  /* Grundlayout */
+  .terminal-footer {
+    padding: 17rem 1rem 10rem 1rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    min-height: 350px; 
+  }
+
+  .terminal-container {
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .terminal-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .traffic-lights { display: flex; gap: 6px; margin-right: 1rem; }
+  .light { width: 10px; height: 10px; border-radius: 50%; }
+  .red { background: #FF5F56; }
+  .yellow { background: #FFBD2E; }
+  .green { background: #27C93F; }
+
+  .terminal-title {
+    color: #666;
+    font-size: 0.8rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .line {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 1.5rem;
+  }
+
+  .prompt { color: #88C0D0; font-weight: bold; margin-right: 0.5rem; }
+  .cmd { color: #ECEFF4; }
+  .output { padding-left: 1.5rem; }
+  .dim { color: #666; }
+  .success { color: #A3BE8C; }
+  .highlight { font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(163, 190, 140, 0.5); }
+  .break { height: 1rem; }
+
+  .terminal-link {
+    color: #88C0D0;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+
+  .terminal-link:hover {
+    border-bottom-color: #88C0D0;
+    text-shadow: 0 0 8px rgba(136, 192, 208, 0.4);
+  }
+
+  .footer-meta {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+  }
+
+  .typing-cursor, .cursor-blink {
+    color: #88C0D0;
+    font-weight: bold;
+    margin-left: 2px; /* Kleiner Abstand zum Text */
+  }
+  
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+</style>

@@ -1,0 +1,223 @@
+---
+/* src/components/Research.astro */
+---
+
+<section class="research-section">
+  <div class="header">
+    <span class="mono-tag">04 // ACADEMIC WORK</span>
+    <h2 class="title">Systemic Analysis</h2>
+    <p class="subtitle">Exploring complex societal structures through comparative studies and policy analysis.</p>
+  </div>
+
+  <div class="papers-grid">
+    
+    <article class="paper-card">
+      <div class="paper-header">
+        <div class="tags">
+          <span class="tag">Political Science</span>
+          <span class="tag">System Theory</span>
+        </div>
+        <span class="year">2025</span>
+      </div>
+      
+      <h3 class="paper-title">Restriktive Migrationspolitik & Integrationsdynamik</h3>
+      <p class="paper-abstract">
+        Eine Analyse der Wechselwirkung zwischen politischen Restriktionen und Integrationserfolg. Untersucht wird, wie Unsicherheitsfaktoren (z.B. befristete Aufenthaltstitel) mit dem Spracherwerb und der Arbeitsmarktpartizipation korrelieren.
+      </p>
+      
+      <div class="key-insight">
+        <span class="insight-label">Key Insight</span>
+        <p class="insight-text">
+          Restriktive Politik erzeugt eine "Systemische Unsicherheit", die Integrationswillen und -fähigkeit hemmt. Stabile Strukturen sind effektiver als Abschreckung, da Integration stark mit der Planungssicherheit des Asylverfahrens korreliert.
+        </p>
+      </div>
+
+      <a href="/papers/migration-analyse.pdf" target="_blank" class="read-link">
+        Read Full Paper <span class="arrow">→</span>
+      </a>
+    </article>
+
+    <article class="paper-card">
+      <div class="paper-header">
+        <div class="tags">
+          <span class="tag">Criminology</span>
+          <span class="tag">Comparative Law</span>
+        </div>
+        <span class="year">2021</span>
+      </div>
+      
+      <h3 class="paper-title">Retributive vs. Restorative Justice: USA & Norwegen</h3>
+      <p class="paper-abstract">
+        Ein Vergleich zweier Strafvollzugssysteme unter Berücksichtigung christlicher Ethik und Effizienz. Gegenüberstellung des US-Modells (Fokus: Vergeltung/Sicherung) und des norwegischen Modells (Fokus: Rehabilitation/Reintegration).
+      </p>
+      
+      <div class="key-insight">
+        <span class="insight-label">Key Insight</span>
+        <p class="insight-text">
+          Das US-System korreliert mit einer Rückfallquote von ~76,6% (5 Jahre), während Norwegen durch das "Normalitätsprinzip" und progressive Reintegration eine Quote von nur ~20% erreicht.
+        </p>
+      </div>
+
+      <a href="/papers/strafvollzug-vergleich.pdf" target="_blank" class="read-link">
+        Read Full Paper <span class="arrow">→</span>
+      </a>
+    </article>
+
+  </div>
+</section>
+
+<style>
+  /* ... Der Style-Teil bleibt exakt gleich wie vorher ... */
+  .research-section {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8rem 2rem;
+    color: white;
+  }
+
+  .header {
+    margin-bottom: 4rem;
+  }
+
+  .mono-tag {
+    font-family: monospace;
+    color: rgba(136, 192, 208, 0.8);
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 0 0 1rem 0;
+  }
+
+  .subtitle {
+    color: #a0a0a0;
+    font-size: 1.2rem;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .papers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .papers-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .paper-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .paper-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(136, 192, 208, 0.3);
+    transform: translateY(-5px);
+  }
+
+  .paper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .year {
+    font-family: monospace;
+    color: #666;
+  }
+
+  .paper-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+  }
+
+  .paper-abstract {
+    color: #b0b0b0;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .key-insight {
+    background: rgba(136, 192, 208, 0.05);
+    border-left: 2px solid #88C0D0;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    margin-top: auto;
+  }
+
+  .insight-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #88C0D0;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+  }
+
+  .insight-text {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .read-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .read-link:hover {
+    opacity: 1;
+  }
+
+  .arrow {
+    transition: transform 0.2s;
+  }
+
+  .read-link:hover .arrow {
+    transform: translateX(5px);
+  }
+</style>
