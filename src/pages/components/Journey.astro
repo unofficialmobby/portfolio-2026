@@ -60,39 +60,39 @@ const journeyStations = [
 
 <style>
   #journey-section {
-    /* MOBILE FIRST: Weniger Abstand oben/unten */
+    /* MOBILE FIRST: Kompakter Abstand */
     padding: var(--spacing-large) 0;
     position: relative;
-    overflow: hidden; /* Verhindert Scrollbars */
+    overflow: hidden;
   }
 
-  /* --- TIMELINE CONTAINER --- */
   .timeline-container {
     width: 100%;
-    /* MOBILE: Auto-Höhe, damit alles untereinander passt */
     height: auto; 
-    padding: 0 1rem; /* Seitenabstand auf Handy */
+    /* WICHTIG: Puffer auf Mobile, damit Karten nicht am Rand kleben */
+    padding: 0 1rem; 
   }
 
   .timeline {
     display: flex;
-    /* MOBILE: Untereinander stapeln! */
+    /* MOBILE: Untereinander */
     flex-direction: column; 
-    gap: 1.5rem; /* Kleinerer Abstand zwischen Karten */
+    gap: 1rem; /* Kleiner Abstand zwischen Karten */
     width: 100%;
   }
 
   /* --- CARD STYLING (MOBILE BASE) --- */
   .station-card {
-    /* MOBILE: Volle Breite */
     width: 100%;
-    /* MOBILE: Kompaktes Padding */
-    padding: 1.5rem !important; 
+    /* FIX 1: Sehr kompaktes Padding für Mobile */
+    padding: 1.25rem !important; 
     
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     transition: transform 0.3s ease, border-color 0.3s ease;
+    /* FIX 2: Verhindert, dass Inhalt die Box sprengt */
+    overflow-wrap: break-word;
   }
 
   .station-card:hover {
@@ -113,11 +113,11 @@ const journeyStations = [
     color: var(--color-accent);
     font-weight: 700;
     font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Etwas kleiner */
   }
 
   .location-badge {
-    font-size: 0.8rem;
+    font-size: 0.75rem; /* Etwas kleiner */
     color: var(--color-text-secondary);
     background: rgba(255,255,255,0.05);
     padding: 2px 8px;
@@ -125,9 +125,9 @@ const journeyStations = [
   }
 
   .station-card h3 {
-    /* MOBILE: Kleinere Überschrift */
-    font-size: 1.25rem; 
-    margin: 0 0 1rem 0;
+    /* FIX 3: Kleinere Überschrift auf Mobile */
+    font-size: 1.2rem; 
+    margin: 0 0 0.75rem 0;
     color: var(--color-text-primary);
     line-height: 1.3;
   }
@@ -135,44 +135,41 @@ const journeyStations = [
   .station-card .description {
     margin: 0;
     color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.9rem; /* Etwas kleinerer Fließtext */
+    line-height: 1.5;
   }
 
   /* --- DESKTOP UPGRADE (ab 768px) --- */
-  /* Hier aktivieren wir den horizontalen Look wieder */
   @media (min-width: 768px) {
-    
     #journey-section {
       padding: var(--spacing-xlarge) 0;
     }
 
     .timeline-container {
-      /* DESKTOP: Fixe Höhe für den horizontalen Scroll-Tunnel */
       height: 500px; 
       display: flex;
       align-items: center;
-      padding: 0; /* Padding wird vom Wrapper übernommen */
+      padding: 0; 
     }
 
     .timeline {
-      /* DESKTOP: Nebeneinander */
+      /* Zurück zum horizontalen Layout */
       flex-direction: row; 
       flex-wrap: nowrap;
-      width: max-content; /* Damit es breit wird */
+      width: max-content;
       gap: var(--spacing-large);
-      padding: 0 var(--spacing-xlarge); /* Startabstand links */
+      padding: 0 var(--spacing-xlarge);
     }
 
     .station-card {
-      /* DESKTOP: Fixe Breite für schöne Karten */
       flex: 0 0 400px; 
-      padding: 2.5rem !important; /* Mehr Luft */
+      /* Große Abstände für Desktop zurück */
+      padding: 2.5rem !important; 
     }
 
-    .station-card h3 {
-      font-size: 1.5rem; /* Größere Schrift */
-    }
+    .station-card h3 { font-size: 1.5rem; }
+    .period { font-size: 0.9rem; }
+    .station-card .description { font-size: 0.95rem; }
   }
 </style>
 
@@ -183,11 +180,8 @@ const journeyStations = [
   gsap.registerPlugin(ScrollTrigger);
 
   window.addEventListener('load', () => {
-    // Media Query Check: Animation nur auf Desktop (min-width: 768px)
-    // ScrollTrigger.matchMedia ist perfekt dafür
+    // Animation NUR auf Desktop aktivieren
     ScrollTrigger.matchMedia({
-      
-      // Desktop
       "(min-width: 768px)": function() {
         const timeline = document.querySelector("#timeline");
         if (!timeline) return;
@@ -202,20 +196,12 @@ const journeyStations = [
               trigger: "#journey-section",
               pin: true,
               scrub: 1,
-              // Wir addieren etwas Puffer zum Ende, damit es sich nicht zu schnell anfühlt
               end: () => `+=${amountToScroll + 200}`, 
               invalidateOnRefresh: true,
             }
           });
         }
-      },
-
-      // Mobile
-      "(max-width: 767px)": function() {
-        // Hier machen wir nichts (aufräumen passiert automatisch durch CSS)
-        // Kein Pinning, kein horizontaler Scroll -> Nativer vertikaler Scroll
       }
-      
     });
   });
 </script>

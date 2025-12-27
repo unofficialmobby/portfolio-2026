@@ -129,7 +129,12 @@
     transition: transform 0.3s ease, border-color 0.3s ease;
     
     /* Sicherstellen, dass nichts abgeschnitten wird, falls es doch mal eng wird */
-    overflow: visible; 
+    overflow: visible;
+    overflow-wrap: break-word; 
+    word-break: break-word;
+  
+    /* Sicherstellen, dass die Box nicht breiter als 100% des Grids wird */
+    max-width: 100%; 
   }
 
   /* --- STYLING DER STANDARD BOXEN --- */
@@ -240,7 +245,7 @@
     filter: grayscale(0%);
     opacity: 0.8;
     /* Beim Hover zoomen wir von dem aktuellen Status noch etwas weiter rein */
-    transform: scale(1.05);
+    transform: scale(1.025);
   }
 
   .card-content {
