@@ -141,13 +141,21 @@ const year = new Date().getFullYear();
 <style>
   /* Grundlayout */
   .terminal-footer {
-    padding: 17rem 1rem 10rem 1rem;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    z-index: 10;
-    min-height: 350px; 
+  /* MOBILE FIRST: Moderate Abstände */
+  padding: 6rem 1rem 4rem 1rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  min-height: 350px; 
+}
+
+/* DESKTOP: Die riesigen Abstände von vorher */
+@media (min-width: 768px) {
+  .terminal-footer {
+      padding: 17rem 1rem 10rem 1rem;
   }
+}
 
   .terminal-container {
     background: rgba(10, 10, 10, 0.95);

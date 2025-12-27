@@ -26,9 +26,16 @@
   let textPoints = []; 
   
   // CONFIG
-  const particleCount = 315; 
+
+  const isMobile = window.innerWidth < 768;
+  let basedivisor = 1;
+
+  if (isMobile) {
+    basedivisor = 5; // Entspricht einer Fünftelung (1 * 5)
+  }
   const connectionDistance = 164; 
   const connectionDistanceSq = connectionDistance * connectionDistance;
+    const particleCount = 315/ basedivisor; 
 
   // PHYSIK
   const baseMouseDist = 225;     

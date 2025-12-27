@@ -1,4 +1,6 @@
 ---
+/* src/components/Journey.astro */
+
 const journeyStations = [
   { 
     period: "2013 - 2022", 
@@ -20,7 +22,7 @@ const journeyStations = [
   },
   { 
     period: "Ab 2026", 
-    title: "muni",
+    title: "muni", 
     location: "Munich", 
     description: "coming sooner" 
   },
@@ -35,16 +37,20 @@ const journeyStations = [
 
 <section id="journey-section">
   <div class="section-header">
-    <span class="section-label">01 // MILESTONES</span>
-    <h2 class="section-title">Mein Weg</h2>
+    <span class="section-label">02 // EXPERIENCE</span>
+    <h2 class="section-title">My Journey</h2>
+    <p class="section-subtitle">Die Stationen, die mein Verständnis von Systemen geprägt haben.</p>
   </div>
+
   <div class="timeline-container">
     <div id="timeline" class="timeline">
       {journeyStations.map(station => (
         <div class="station-card unified-card">
-          <span class="period">{station.period}</span>
+          <div class="card-header">
+            <span class="period">{station.period}</span>
+            <span class="location-badge">{station.location}</span>
+          </div>
           <h3>{station.title}</h3>
-          <p class="location">{station.location}</p>
           <p class="description">{station.description}</p>
         </div>
       ))}
@@ -54,48 +60,120 @@ const journeyStations = [
 
 <style>
   #journey-section {
-    padding: var(--spacing-xlarge) 0;
-    background-color: transparent;
-    overflow: hidden;
+    /* MOBILE FIRST: Weniger Abstand oben/unten */
+    padding: var(--spacing-large) 0;
+    position: relative;
+    overflow: hidden; /* Verhindert Scrollbars */
   }
 
-  .header {
-    text-align: center;
-    margin-bottom: var(--spacing-large);
-  }
-
-  h2 {
-    font-size: 3rem;
-  }
-
+  /* --- TIMELINE CONTAINER --- */
   .timeline-container {
-    height: 500px;
     width: 100%;
-    display: flex;
-    align-items: center;
+    /* MOBILE: Auto-Höhe, damit alles untereinander passt */
+    height: auto; 
+    padding: 0 1rem; /* Seitenabstand auf Handy */
   }
 
   .timeline {
     display: flex;
-    flex-wrap: nowrap;
-    width: max-content;
-    gap: var(--spacing-large);
-    padding: 0 var(--spacing-xlarge);
+    /* MOBILE: Untereinander stapeln! */
+    flex-direction: column; 
+    gap: 1.5rem; /* Kleinerer Abstand zwischen Karten */
+    width: 100%;
   }
 
+  /* --- CARD STYLING (MOBILE BASE) --- */
   .station-card {
-    flex: 0 0 clamp(300px, 25vw, 400px);
+    /* MOBILE: Volle Breite */
+    width: 100%;
+    /* MOBILE: Kompaktes Padding */
+    padding: 1.5rem !important; 
+    
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
   }
 
   .station-card:hover {
-    transform: translateY(-10px);
     border-color: var(--color-accent);
+    transform: translateY(-5px);
   }
-  
-  .station-card .period { color: var(--color-accent); font-weight: bold; display: block; margin-bottom: var(--spacing-medium); }
-  .station-card h3 { margin: 0 0 var(--spacing-small) 0; font-size: 1.5rem; color: var(--color-text-primary); }
-  .station-card .location { margin: 0 0 var(--spacing-medium) 0; color: var(--color-text-secondary); font-style: italic; }
-  .station-card .description { margin: 0; color: var(--color-text-secondary); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .period {
+    color: var(--color-accent);
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+  }
+
+  .location-badge {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .station-card h3 {
+    /* MOBILE: Kleinere Überschrift */
+    font-size: 1.25rem; 
+    margin: 0 0 1rem 0;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+  }
+
+  .station-card .description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* --- DESKTOP UPGRADE (ab 768px) --- */
+  /* Hier aktivieren wir den horizontalen Look wieder */
+  @media (min-width: 768px) {
+    
+    #journey-section {
+      padding: var(--spacing-xlarge) 0;
+    }
+
+    .timeline-container {
+      /* DESKTOP: Fixe Höhe für den horizontalen Scroll-Tunnel */
+      height: 500px; 
+      display: flex;
+      align-items: center;
+      padding: 0; /* Padding wird vom Wrapper übernommen */
+    }
+
+    .timeline {
+      /* DESKTOP: Nebeneinander */
+      flex-direction: row; 
+      flex-wrap: nowrap;
+      width: max-content; /* Damit es breit wird */
+      gap: var(--spacing-large);
+      padding: 0 var(--spacing-xlarge); /* Startabstand links */
+    }
+
+    .station-card {
+      /* DESKTOP: Fixe Breite für schöne Karten */
+      flex: 0 0 400px; 
+      padding: 2.5rem !important; /* Mehr Luft */
+    }
+
+    .station-card h3 {
+      font-size: 1.5rem; /* Größere Schrift */
+    }
+  }
 </style>
 
 <script>
@@ -105,23 +183,39 @@ const journeyStations = [
   gsap.registerPlugin(ScrollTrigger);
 
   window.addEventListener('load', () => {
-    const timeline = document.querySelector("#timeline");
-    if (!timeline) return;
+    // Media Query Check: Animation nur auf Desktop (min-width: 768px)
+    // ScrollTrigger.matchMedia ist perfekt dafür
+    ScrollTrigger.matchMedia({
+      
+      // Desktop
+      "(min-width: 768px)": function() {
+        const timeline = document.querySelector("#timeline");
+        if (!timeline) return;
 
-    const amountToScroll = timeline.scrollWidth - window.innerWidth;
+        const amountToScroll = timeline.scrollWidth - window.innerWidth;
 
-    if (amountToScroll > 0) {
-      gsap.to(timeline, {
-        x: -amountToScroll,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#journey-section",
-          pin: true,
-          scrub: 1,
-          end: () => `+=${amountToScroll}`,
-          invalidateOnRefresh: true,
+        if (amountToScroll > 0) {
+          gsap.to(timeline, {
+            x: -amountToScroll,
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#journey-section",
+              pin: true,
+              scrub: 1,
+              // Wir addieren etwas Puffer zum Ende, damit es sich nicht zu schnell anfühlt
+              end: () => `+=${amountToScroll + 200}`, 
+              invalidateOnRefresh: true,
+            }
+          });
         }
-      });
-    }
+      },
+
+      // Mobile
+      "(max-width: 767px)": function() {
+        // Hier machen wir nichts (aufräumen passiert automatisch durch CSS)
+        // Kein Pinning, kein horizontaler Scroll -> Nativer vertikaler Scroll
+      }
+      
+    });
   });
 </script>

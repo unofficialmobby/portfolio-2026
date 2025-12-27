@@ -16,10 +16,20 @@
   --color-accent-glow: rgba(136, 192, 208, 0.4);
   
   /* SPACING */
-  --spacing-small: 1rem;
-  --spacing-medium: 2rem;
-  --spacing-large: 4rem;
-  --spacing-xlarge: 8rem;
+  --spacing-small: 0.75rem;
+  --spacing-medium: 1.5rem;
+  --spacing-large: 3rem;
+  --spacing-xlarge: 5rem;
+}
+
+/* AB TABLET/DESKTOP: Abstände vergrößern */
+@media (min-width: 768px) {
+  :root {
+    --spacing-small: 1rem;
+    --spacing-medium: 2rem;
+    --spacing-large: 4rem;
+    --spacing-xlarge: 8rem;
+  }
 }
 
 body {
@@ -98,7 +108,7 @@ body {
   margin-right: auto; /* Block zentrieren */
   
   /* Kleiner Puffer links/rechts für Mobile, damit es nicht am Rand klebt */
-  padding: 0 1rem; 
+  padding: 0 1.5rem; 
 }
 
 .section-label {
