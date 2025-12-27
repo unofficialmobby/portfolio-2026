@@ -53,15 +53,16 @@
 
 <style>
   #skills {
-    padding: var(--spacing-xlarge) var(--spacing-large);
+    /* MOBILE FIRST: Sehr wenig seitlicher Abstand für maximale Breite */
+    padding: var(--spacing-large) 0.5rem;
   }
 
   /* --- GRID CONFIGURATION (MOBILE BASE) --- */
   .bento-grid {
     display: grid;
-    /* Mobile: 2 Spalten, sehr enger Gap */
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 0.5rem;
+    /* Mobile: 2 Spalten, minimaler Gap */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
     max-width: 1000px;
     margin: 0 auto;
   }
@@ -76,10 +77,7 @@
     gap: 0.5rem;
     
     /* Wichtig für Mobile: Layout Schutz */
-    overflow: visible;
-    overflow-wrap: break-word; 
-    word-break: break-word;
-    max-width: 100%;
+    overflow: hidden; /* Verhindert Rausragen */
     
     transition: transform 0.3s ease, border-color 0.3s ease;
   }
@@ -98,28 +96,30 @@
   p {
     color: var(--color-text-secondary);
     font-size: 0.85rem; /* Klein auf Mobile */
-    line-height: 1.5;
+    line-height: 1.4;
     margin-bottom: 0.5rem;
     
-    text-align: justify;
-    hyphens: auto;
-    -webkit-hyphens: auto;
+    /* FIX: Keine automatische Silbentrennung mehr auf Mobile */
+    text-align: left; /* Blocksatz auf Mobile kann auch zu Lücken führen */
+    hyphens: manual;
+    -webkit-hyphens: manual;
+    overflow-wrap: break-word; /* Nur notfalls umbrechen */
   }
 
   /* Tags */
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px; /* Etwas enger */
     margin-top: auto;
-    flex-shrink: 0; 
+    flex-shrink: 0;
   }
 
   .tags span {
     background: rgba(255, 255, 255, 0.1);
     padding: 2px 6px;
     border-radius: 12px;
-    font-size: 0.85rem;
+    font-size: 0.75rem; /* Tags winzig */
     color: var(--color-text-primary);
   }
 
@@ -132,9 +132,9 @@
     position: relative;
     overflow: hidden;
     background: #0a0a0a;
-    padding: 0 !important; 
+    padding: 0 !important;
     border: none;
-    box-shadow: none; 
+    box-shadow: none;
   }
 
   .leadership-card .card-content {
@@ -153,12 +153,14 @@
     top: 0; left: 0; width: 100%;
     height: calc(100% - 8px); /* Mobile Fix */
     filter: grayscale(100%);
-    opacity: 0.5; 
+    opacity: 0.5;
     transition: all 0.5s ease;
     background-repeat: no-repeat;
     background-image: url('../images/jonas.JPG');
-    background-size: cover; 
-    background-position: center 20%;
+    background-size: cover;
+    
+    /* FIX: Gesicht zentrieren auf Mobile */
+    background-position: center center;
   }
 
   /* --- MOBILE PLATZIERUNGEN (Explizit) --- */
@@ -172,10 +174,13 @@
   /* === DESKTOP OVERRIDES (RESTORE LOOK) === */
   /* ========================================= */
   @media (min-width: 768px) {
-    
+    #skills {
+      padding: var(--spacing-xlarge) var(--spacing-large);
+    }
+
     .bento-grid {
       /* Zurück zum Original 3-Spalten Grid */
-      grid-template-columns: repeat(3, 1fr); 
+      grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, minmax(360px, auto));
       gap: var(--spacing-medium); /* Großer Abstand */
     }
@@ -198,8 +203,11 @@
     p {
       font-size: 1.1rem; /* Lesbar auf großen Screens */
       margin-bottom: 1rem;
+      text-align: justify; /* Blocksatz zurück auf Desktop */
+      hyphens: auto;       /* Silbentrennung zurück */
     }
 
+    .tags { gap: 8px; }
     .tags span {
       font-size: 0.9rem;
       padding: 4px 10px;
@@ -208,8 +216,8 @@
     /* IMAGE DESKTOP FIX */
     .image-background {
       height: calc(100% - 16px);
-      background-size: 250% auto; 
-      background-position: 70% 21%; 
+      background-size: 250% auto;
+      background-position: 70% 21%; /* Deine Desktop-Position */
     }
 
     /* DESKTOP LAYOUT (EXAKT WIE VORHER) */
@@ -226,8 +234,8 @@
     .item-lead {
       grid-column: span 1;
       /* Reset min-height, grid-row regelt das */
-      grid-row: span 1; 
-      min-height: auto; 
+      grid-row: span 1;
+      min-height: auto;
     }
     
     .item-method {
