@@ -1,5 +1,5 @@
 <nav class="floating-nav glass-panel">
-  <a href="#top" class="nav-item" aria-label="Startseite">
+  <a href="#top" class="home-btin" aria-label="Startseite">
     <span class="icon">⌂</span>
   </a>
   <a href="#journey-section" class="nav-item" aria-label="Mein Weg">
@@ -11,7 +11,10 @@
   <a href="#skills" class="nav-item" aria-label="Skills">
     <span class="icon">Skill</span>
   </a>
-  <a href="mailto:deine-email@example.com" class="nav-item highlight" aria-label="Kontakt">
+    <a href="#research" class="nav-item" aria-label="Systemic Analysis">
+    <span class="icon">Systemic Analysis</span>
+  </a>
+  <a href="mailto:jonas.heinze@gmx.de" class="nav-item highlight" aria-label="Kontakt">
     <span class="icon">✉</span>
   </a>
 </nav>
@@ -73,22 +76,3 @@
     }
   }
 </style>
-
-<script>
-  // Smooth Scroll Logik für die Links (falls Lenis mal kurz hakt)
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      // Spezialfall "top"
-      if (targetId === '#top') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        const target = document.querySelector(targetId);
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    });
-  });
-</script>

@@ -4,8 +4,8 @@
   :global(body) { 
       background-color: #0a0a0a; 
       min-height: 100vh;
-      user-select: none; 
-      -webkit-user-select: none;
+      /*user-select: none; 
+      -webkit-user-select: none;*/
   }
   
   #neural-canvas {
@@ -155,12 +155,9 @@
   // --- EVENTS ---
   window.addEventListener('scroll', checkScroll);
   
-  window.addEventListener('mousemove', (e) => {
-    if (lastMouse.x === -1000) { lastMouse.x = e.x; lastMouse.y = e.y; }
-    mouseVelocity.x = e.x - lastMouse.x;
-    mouseVelocity.y = e.y - lastMouse.y;
-    lastMouse.x = e.x; lastMouse.y = e.y;
-    mouse.x = e.x; mouse.y = e.y;
+  window.addEventListener('mousedown', () => { 
+      isMouseDown = true; 
+      currentGrabRadius = startGrabDist;
   });
   
   window.addEventListener('mouseout', () => { mouse.x = -1000; isMouseDown = false; });
