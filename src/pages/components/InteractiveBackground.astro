@@ -163,6 +163,14 @@
       isMouseDown = true; 
       currentGrabRadius = startGrabDist;
   });
+
+  window.addEventListener('mousemove', (e) => {
+    if (lastMouse.x === -1000) { lastMouse.x = e.x; lastMouse.y = e.y; }
+    mouseVelocity.x = e.x - lastMouse.x;
+    mouseVelocity.y = e.y - lastMouse.y;
+    lastMouse.x = e.x; lastMouse.y = e.y;
+    mouse.x = e.x; mouse.y = e.y;
+  });
   
   window.addEventListener('mouseout', () => { mouse.x = -1000; isMouseDown = false; });
   
