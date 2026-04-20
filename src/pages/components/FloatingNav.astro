@@ -1,5 +1,5 @@
 <nav class="floating-nav glass-panel">
-  <a href="#top" class="home-btin" aria-label="Startseite">
+  <a href="#top" class="home-btn" aria-label="Startseite">
     <span class="icon">⌂</span>
   </a>
   <a href="#journey-section" class="nav-item" aria-label="Mein Weg">
@@ -32,47 +32,73 @@
     padding: 10px 16px;
     border-radius: 100px; /* Pill-Shape */
     
-    /* Wir nutzen deine globale Glass-Klasse, passen sie aber hier leicht an */
     background: rgba(20, 20, 20, 0.7) !important; 
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px); /* Verstärkt den Glass-Effekt */
   }
 
-  .nav-item {
-    color: var(--color-text-secondary);
+  /* Basis-Styling für ALLE Buttons (inklusive Haus) */
+  .nav-item, .home-btn {
+    color: var(--color-text-secondary, #b0b0b0);
     text-decoration: none;
-    padding: 8px 16px;
+    padding: 8px 16px; /* Gleiches Padding für perfekte Zentrierung */
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    white-space: nowrap; /* WICHTIG: Verhindert Text-Umbruch! */
   }
 
-  .nav-item:hover {
+  /* Spezifische Anpassung nur für das Haus */
+  .home-btn {
+    color: white; /* Startfarbe */
+    font-size: 1.2rem; /* Das Haus-Symbol etwas größer machen */
+    padding: 8px 12px; /* Etwas schmaler, da es nur ein Icon ist */
+  }
+
+  /* Hover-Effekte */
+  .nav-item:hover, .home-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-primary);
+    color: var(--color-text-primary, white);
     transform: translateY(-2px);
   }
 
-  /* Der Kontakt-Button sticht etwas hervor */
-  .nav-item.highlight {
-    background: var(--color-accent);
-    color: #000; /* Schwarzer Text auf Blauem Button für Kontrast */
-    font-weight: bold;
-  }
-  .nav-item.highlight:hover {
-    box-shadow: 0 0 15px var(--color-accent);
+  .home-btn:hover {
+    color: #88C0D0; /* Dein Teal-Blau beim Drüberfahren */
   }
 
-  /* Auf dem Handy verstecken wir den Text und zeigen nur Icons, um Platz zu sparen */
-  @media (max-width: 600px) {
+  /* Kontakt-Button */
+  .nav-item.highlight {
+    background: var(--color-accent, #88C0D0);
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .nav-item.highlight:hover {
+    box-shadow: 0 0 15px rgba(136, 192, 208, 0.5);
+  }
+
+  /* HANDY / RESPONSIVE FIX */
+  @media (max-width: 768px) {
     .floating-nav {
+      width: 95vw; /* Fast volle Breite auf dem Handy */
       bottom: 1.5rem;
-      padding: 8px 12px;
-      width: 90%; /* Breiter auf Handy */
-      justify-content: space-around;
+      justify-content: flex-start; /* Links ausrichten für den Scroll */
+      
+      /* HIER PASSIERT DIE MAGIE: Erlaubt horizontales Wischen */
+      overflow-x: auto; 
+      
+      /* Versteckt den hässlichen Scrollbalken visuell */
+      -ms-overflow-style: none;  /* IE/Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    
+    .floating-nav::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
     }
   }
 </style>
