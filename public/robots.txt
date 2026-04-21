@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+#erlaubt KI-Bots explizit
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+#Verhindert das Indexieren der rechtlichen Seiten
+Disallow: /impressum
+Disallow: /datenschutz

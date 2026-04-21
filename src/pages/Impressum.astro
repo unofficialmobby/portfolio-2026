@@ -1,12 +1,14 @@
 ---
 /* src/pages/impressum.astro */
 import '../styles/global.css';
+import SafeContact from '../components/SafeContact.astro';
 ---
 
 <html lang="de">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/jonasicon.svg" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Impressum | Jonas Heinze</title>
 </head>
 <body>
@@ -23,17 +25,15 @@ import '../styles/global.css';
                 <h2>Anbieter</h2>
                 <p>
                     <strong>Jonas Heinze</strong><br />
-                    Valerystrasse 70<br />
-                    85716 Unterschleißheim<br />
-                    Deutschland
+                    <SafeContact type="address" /
                 </p>
             </div>
 
             <div class="legal-block">
                 <h2>Kontakt</h2>
                 <p>
-                    <strong>E-Mail:</strong> jonas.heinze@gmx.de<br />
-                    <strong>Telefon:</strong> +49 1575 4131693
+                    <strong>E-Mail:</strong> <SafeContact type="email" /><br />
+                    <strong>Telefon:</strong> <SafeContact type="tel" />
                 </p>
             </div>
 

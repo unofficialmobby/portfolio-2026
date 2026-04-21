@@ -1,0 +1,56 @@
+---
+// src/components/SafeContact.astro
+interface Props {
+  type: 'email' | 'tel' | 'address';
+}
+const { type } = Astro.props;
+---
+
+<span class="safe-contact" data-type={type}>
+  <span class="loading-dim">[Lade Information...]</span>
+</span>
+
+<script>
+  // Deine echten Daten hier stückeln
+  const user = "jonas.heinze";
+  const domain = "gmx.de";
+  const phone = "+49 157"+"5 4131693";
+  const street = "Valery"+"strasse 7"+ "0"; 
+  const city = "857"+"16 Unter"+"schleissheim";
+
+  document.querySelectorAll('.safe-contact').forEach(container => {
+    const type = container.getAttribute('data-type');
+    
+    if (type === 'email') {
+      container.innerHTML = `<a href="mailto:${user}@${domain}">${user}@${domain}</a>`;
+    } else if (type === 'tel') {
+      container.innerHTML = `<a href="tel:${phone.replace(/\s/g, '')}">${phone}</a>`;
+    } else if (type === 'address') {
+      container.innerHTML = `${street}<br />${city}<br />Deutschland`;
+    }
+  });
+</script>
+
+<style>
+  .safe-contact {
+    display: inline-block;
+    color: #b0b0b0; /* Grundfarbe für Text */
+  }
+
+  .safe-contact :global(a) {
+    color: #88C0D0 !important; /* Dein Hellblau/Teal */
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .safe-contact :global(a:hover) {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  .loading-dim {
+    color: #444;
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+</style>
