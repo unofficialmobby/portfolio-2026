@@ -1,0 +1,93 @@
+---
+/* src/pages/impressum.astro */
+import '../styles/global.css';
+---
+
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impressum | Jonas Heinze</title>
+</head>
+<body>
+    <main class="legal-container">
+        <a href="/" class="back-link">
+            <span class="arrow">←</span> Zurück zum Portfolio
+        </a>
+        
+        <section class="legal-content">
+            <h1>Impressum</h1>
+            <p class="law-reference">Angaben gemäß § 5 DDG</p>
+
+            <div class="legal-block">
+                <h2>Anbieter</h2>
+                <p>
+                    <strong>Jonas Heinze</strong><br />
+                    Valerystrasse 70<br />
+                    85716 Unterschleißheim<br />
+                    Deutschland
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2>Kontakt</h2>
+                <p>
+                    <strong>E-Mail:</strong> jonas.heinze@gmx.de<br />
+                    <strong>Telefon:</strong> +49 1575 4131693
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2>Verantwortlich für den Inhalt</h2>
+                <p>Jonas Heinze (Anschrift wie oben)</p>
+            </div>
+
+            <div class="legal-block">
+                <h2>Haftungsausschluss</h2>
+                <h3>Inhalte</h3>
+                <p>Als Diensteanbieter bin ich gemäß § 7 Abs.1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich, jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>
+                
+                <h3>Links</h3>
+                <p>Diese Website enthält Links zu externen Webseiten Dritter. Auf deren Inhalte habe ich keinen Einfluss und übernehme daher keine Gewähr für diese fremden Inhalte.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
+<style>
+    body {
+        background-color: #0a0a0a;
+        color: #e0e0e0;
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.7;
+    }
+    .legal-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 6rem 2rem;
+    }
+    .back-link {
+        color: #88C0D0;
+        text-decoration: none;
+        font-family: monospace;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 4rem;
+        font-size: 0.9rem;
+        transition: transform 0.2s;
+    }
+    .back-link:hover { transform: translateX(-5px); }
+    
+    h1 { font-size: 3rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px; }
+    .law-reference { color: #555; font-family: monospace; margin-bottom: 4rem; font-size: 0.9rem; }
+    
+    .legal-block { margin-bottom: 3rem; }
+    h2 { color: #88C0D0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.2rem; font-weight: 700; }
+    h3 { color: white; font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+    
+    p { margin-bottom: 1rem; color: #b0b0b0; font-size: 1rem; }
+    strong { color: white; }
+    .note { font-size: 0.8rem; color: #555; font-style: italic; }
+</style>

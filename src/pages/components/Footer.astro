@@ -12,7 +12,7 @@ const year = new Date().getFullYear();
         <span class="light yellow"></span>
         <span class="light green"></span>
       </div>
-      <span class="terminal-title">user@jheinze:~/contact</span>
+      <span class="terminal-title">user@jheinze:~/contact_legal</span>
     </div>
     
     <div class="terminal-body">
@@ -42,6 +42,12 @@ const year = new Date().getFullYear();
         <a href="https://www.linkedin.com/in/jonas-heinze-53a411168/" target="_blank" class="terminal-link">LinkedIn_Profile</a>
       </div>
 
+      <div class="line legal" id="line-legal" style="display: none;">
+        <span class="prompt">➜</span> 
+        <a href="/impressum" class="terminal-link legal-link">Impressum.txt</a>
+        <a href="/datenschutz" class="terminal-link legal-link">Datenschutz.txt</a>
+      </div>
+
       <div class="line footer-meta" id="line-meta" style="display: none;">
         <span class="dim">© {year} Jonas Heinze. Built with Astro & Neural Particles.</span>
       </div>
@@ -63,7 +69,6 @@ const year = new Date().getFullYear();
   const finalMsgTarget = document.getElementById('final-msg');
   
   const commandText = "initiate_handshake.sh";
-  // Hier der finale Text
   const finalText = "Thank you for scrolling.";
   
   let hasStarted = false;
@@ -73,7 +78,6 @@ const year = new Date().getFullYear();
   async function typeWriter(text, element) {
     for (let i = 0; i < text.length; i++) {
       element.textContent += text.charAt(i);
-      // Geschwindigkeit: zufällig zwischen 50ms und 100ms
       await wait(Math.random() * 50 + 50);
     }
   }
@@ -82,16 +86,13 @@ const year = new Date().getFullYear();
     if (hasStarted) return;
     hasStarted = true;
 
-    // 1. Start Verzögerung
     await wait(800);
 
-    // 2. Ersten Befehl tippen
     if (typewriterTarget) {
         // @ts-ignore
         await typeWriter(commandText, typewriterTarget);
     }
     
-    // Tipp-Cursor weg
     if (typingCursor) {
         // @ts-ignore
         typingCursor.style.display = 'none';
@@ -99,14 +100,15 @@ const year = new Date().getFullYear();
 
     await wait(300); 
 
-    // 3. Zeilenaufbau
+    // Zeilenaufbau inklusive der neuen Legal-Zeile
     const lines = [
         { id: 'line-1', delay: 400 },
         { id: 'line-2', delay: 300 },
         { id: 'line-3', delay: 600 }, 
         { id: 'line-links', delay: 200 },
+        { id: 'line-legal', delay: 200 }, // Neue Zeile erscheint kurz nach den Kontakten
         { id: 'line-meta', delay: 100 },
-        { id: 'line-cursor', delay: 0 } // Cursor erscheint sofort
+        { id: 'line-cursor', delay: 0 }
     ];
 
     for (const lineConfig of lines) {
@@ -117,7 +119,6 @@ const year = new Date().getFullYear();
         }
     }
 
-    // 4. Das Finale: 5 Sekunden warten, dann bedanken
     await wait(5000);
     
     if (finalMsgTarget) {
@@ -139,23 +140,20 @@ const year = new Date().getFullYear();
 </script>
 
 <style>
-  /* Grundlayout */
   .terminal-footer {
-  /* MOBILE FIRST: Moderate Abstände */
-  padding: 10rem 1rem 8rem 1rem;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 10;
-  min-height: 350px; 
-}
-
-/* DESKTOP: Die riesigen Abstände von vorher */
-@media (min-width: 768px) {
-  .terminal-footer {
-      padding: 17rem 1rem 10rem 1rem;
+    padding: 10rem 1rem 8rem 1rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    min-height: 400px; 
   }
-}
+
+  @media (min-width: 768px) {
+    .terminal-footer {
+        padding: 17rem 1rem 10rem 1rem;
+    }
+  }
 
   .terminal-container {
     background: rgba(10, 10, 10, 0.95);
@@ -228,8 +226,14 @@ const year = new Date().getFullYear();
     text-shadow: 0 0 8px rgba(136, 192, 208, 0.4);
   }
 
+  /* Spezielle Farbe für rechtliche Links, damit sie dezenter sind */
+  .legal-link {
+    color: #5e81ac;
+    font-size: 0.85rem;
+  }
+
   .footer-meta {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     font-size: 0.75rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     padding-top: 1rem;
@@ -238,7 +242,7 @@ const year = new Date().getFullYear();
   .typing-cursor, .cursor-blink {
     color: #88C0D0;
     font-weight: bold;
-    margin-left: 2px; /* Kleiner Abstand zum Text */
+    margin-left: 2px;
   }
   
   .cursor-blink {
