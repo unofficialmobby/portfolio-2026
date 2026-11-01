@@ -54,6 +54,7 @@
   let transitionProgress = 0; 
   const transitionSpeed = 0.015; 
   const maxSpeed = 30;
+  const physicsStepsPerFrame = 2;
 
   let currentGrabRadius = startGrabDist;
 
@@ -331,9 +332,7 @@
     animate();
   }
 
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    
+  function step() {
     if (isTriggerActive && textPoints.length > 0) {
         transitionProgress = Math.min(1.0, transitionProgress + transitionSpeed);
     } else {
@@ -347,12 +346,20 @@
     }
 
     mouseVelocity.x *= 0.9; mouseVelocity.y *= 0.9;
-    
+
+    for (let i = 0; i < particles.length; i++) particles[i].update(i);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Physik läuft zweimal pro Frame, Zeichnen nur einmal
+    for (let s = 0; s < physicsStepsPerFrame; s++) step();
+
     const shouldDrawLines = transitionProgress < 0.95;
     const lineFade = 1.0 - transitionProgress;
 
     for (let i = 0; i < particles.length; i++) {
-      particles[i].update(i); 
       particles[i].draw();
 
       if (shouldDrawLines) { 
@@ -380,6 +387,6 @@
     requestAnimationFrame(animate);
   }
 
-  window.addEventListener('load', init);
-  setTimeout(init, 500); 
+  if (document.readyState === 'complete') init();
+  else window.addEventListener('load', init, { once: true });
 </script>
